@@ -1,0 +1,32 @@
+---
+azs:
+- name: z1
+  cloud_properties: {}
+
+disk_types:
+- name: default
+  disk_size: 1024
+
+networks:
+- name: redis
+  subnets:
+  - azs: [z1]
+    range: 10.244.0.0/24
+    reserved:
+    - 10.244.0.1
+    static: [10.244.0.2-10.244.0.4 ]
+
+compilation:
+  workers: 5
+  az: z1
+  reuse_compilation_vms: true
+  network: redis
+
+
+resource_pools:
+- name: small_z1
+  network: redis
+  size: 5
+  stemcell:
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+    version: latest
